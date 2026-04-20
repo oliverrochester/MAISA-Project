@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Box, TextField, Button } from '@mui/material';
 import { sortText } from '../apiUtils/sortText';
 import validateCommaSeparatedNumbers from '../lib/validateCommaSeparatedNumbers';
+import { Tooltip } from '@mui/material';
 
 
 export default function NumberWords() {
@@ -43,7 +44,7 @@ export default function NumberWords() {
             />
             <Button sx={{ mt: 2 }} variant="contained" onClick={handleSortText}>Sort Text</Button>
             {validOutput && (
-                <Box sx={{ mt: 2, maxWidth: '40rem', width: '100%', maxHeight: '40rem', overflow: 'auto' }} data-testid="output-container">
+                <Box sx={{ mt: 2, maxWidth: '30rem', width: '100%', maxHeight: '40rem', overflow: 'auto' }} data-testid="output-container">
                     {returnedOutput.map((item, index) => (
                         <Box
                             key={index}
@@ -54,6 +55,8 @@ export default function NumberWords() {
                                 border: '1px solid',
                                 borderColor: 'divider',
                                 borderRadius: 1,
+                                justifyContent: 'center',
+                                display: 'flex',
                             }}
                         >
 
@@ -64,21 +67,23 @@ export default function NumberWords() {
                             )}
 
                             {item.type === 'image' && (
-                                <Box sx={{ mt: 1 }} data-testid={`output-image-container-${index}`}>
-                                    {item.image ? (
-                                        <Box
-                                            component="img"
-                                            data-testid={`output-image-item-${index}`}
-                                            src={item.image}
-                                            alt=""
-                                            sx={{ maxWidth: '100%', display: 'block' }}
-                                        />
-                                    ) : (
-                                        <Box component="span" data-testid={`output-image-placeholder-${index}`} sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
-                                            Unable to load image.
-                                        </Box>
-                                    )}
-                                </Box>
+                                <Tooltip title={item.value} placement="left">
+                                    <Box sx={{ mt: 1 }} data-testid={`output-image-container-${index}`}>
+                                        {item.image ? (
+                                            <Box
+                                                component="img"
+                                                data-testid={`output-image-item-${index}`}
+                                                src={item.image}
+                                                alt=""
+                                                sx={{ maxWidth: '100%', display: 'block' }}
+                                            />
+                                        ) : (
+                                            <Box component="span" data-testid={`output-image-placeholder-${index}`} sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+                                                Unable to load image.
+                                            </Box>
+                                        )}
+                                    </Box>
+                                </Tooltip>
                             )}
                         </Box>
                     ))}

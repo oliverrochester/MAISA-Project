@@ -11,23 +11,21 @@ export default function validateCommaSeparatedNumbers(input) {
         if (p.length < 1) {
             return {
                 ok: false,
-                parts: parts,
                 error: 'Empty number detected. Please ensure all numbers are valid whole numbers (e.g. 1, 2, 15, -42).',
             };
         }
         if (!WHOLE_NUMBER_TOKEN.test(p)) {
             return {
                 ok: false,
-                parts: parts,
                 error: `Invalid whole number: "${p}". Use whole numbers only (e.g. 1, 2, 15, -42).`,
             };
         }
         const n = Number(p);
         if (!Number.isSafeInteger(n)) {
+            const displayP = p.length > 20 ? p.substring(0, 20) + '...' : p;
             return {
                 ok: false,
-                parts: parts,
-                error: `Number too large: "${p}". Use whole numbers only (e.g. 1, 2, 15, -42).`,
+                error: `Number too large: "${displayP}". Use whole numbers only (e.g. 1, 2, 15, -42).`,
             };
         }
         normalizedParts.push(n);
