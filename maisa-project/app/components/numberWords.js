@@ -24,7 +24,7 @@ export default function NumberWords() {
             setValidOutput(true);
             setValidationError(null);
         } catch (error) {
-            console.error('Error sorting text:', error);
+            setValidationError('An error occurred while sorting. Please try again later.');
         }
     };
 
@@ -79,7 +79,6 @@ export default function NumberWords() {
                                         </Box>
                                     )}
                                 </Box>
-                                
                             )}
                         </Box>
                     ))}

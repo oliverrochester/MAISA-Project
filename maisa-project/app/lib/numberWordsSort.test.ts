@@ -19,23 +19,19 @@ describe('buildSortTextResponse', () => {
     });
 
     it('Tests sorting only large numbers with image type', () => {
-        const parsed = parseSortTextRequestBody([9005, -9006, 10000, 100867, 8008475]);
+        const parsed = parseSortTextRequestBody([9005, 9006, 10000, 100867, 8008475]);
         expect(parsed.ok).toBe(true);
         if (!parsed.ok) throw new Error("Expected parsing to succeed");
         const result = buildSortTextResponse(parsed.numbers);
-        expect(result.map((r) => r.number)).toEqual([8008475, -9006, 9005, 100867, 10000]);
+        expect(result.map((r) => r.number)).toEqual([8008475, 9005, 9006, 100867, 10000]);
         expect(result.map((r) => r.value)).toEqual([
             'Eight Million Eight Thousand Four Hundred Seventy Five',
-            'Negative Nine Thousand Six',
             'Nine Thousand Five',
+            'Nine Thousand Six',
             'One Hundred Thousand Eight Hundred Sixty Seven',
             'Ten Thousand'
         ]);
-        expect(result[0].type).toBe('image');
-        expect(result[1].type).toBe('text');
-        expect(result[2].type).toBe('image');
-        expect(result[3].type).toBe('image');
-        expect(result[4].type).toBe('image');
+        expect(result.every((r) => r.type === 'image')).toBe(true);
     });
 
     it('Edge Case: Tests sorting with text to image transition [9000, 9001]', () => {
@@ -52,7 +48,7 @@ describe('buildSortTextResponse', () => {
           expect(result[1].type).toBe('image');
     });
 
-    it('Tests sorting correctly with a mix of small text and large image numbers', () => {
+    it('Tests sorting correctly with a mix of text and image numbers', () => {
         const parsed = parseSortTextRequestBody([0, 9001, -1, -9002, 9002, 2]);
         expect(parsed.ok).toBe(true);
         if (!parsed.ok) throw new Error("Expected parsing to succeed");
