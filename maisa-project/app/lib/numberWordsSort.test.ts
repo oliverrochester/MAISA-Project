@@ -11,7 +11,7 @@ describe('buildSortTextResponse', () => {
         expect(result.every((r) => r.type === 'text')).toBe(true);
     });
 
-    it('handles negative numbers and zero correctly', () => {
+    it('Test sorting negative numbers and zero correctly', () => {
         const result = buildSortTextResponse([0, -1, -2]);
         expect(result.map((r) => r.number)).toEqual([-1, -2, 0]);
         expect(result.map((r) => r.value)).toEqual(['Negative One', 'Negative Two', 'Zero']);
