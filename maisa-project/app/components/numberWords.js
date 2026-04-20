@@ -39,6 +39,11 @@ export default function NumberWords() {
                 rows={4}
                 value={inputNumberListString}
                 onChange={(e) => setInputNumberListString(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                    }
+                }}
                 error={Boolean(validationError)}
                 helperText={validationError ?? undefined}
             />
