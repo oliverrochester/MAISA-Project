@@ -34,6 +34,8 @@ export default function NumberWords() {
                 sx={{ width: '30rem' }}
                 label="Enter a comma separated list of whole numbers"
                 variant="outlined"
+                multiline
+                rows={4}
                 value={inputNumberListString}
                 onChange={(e) => setInputNumberListString(e.target.value)}
                 error={Boolean(validationError)}
@@ -41,10 +43,11 @@ export default function NumberWords() {
             />
             <Button sx={{ mt: 2 }} variant="contained" onClick={handleSortText}>Sort Text</Button>
             {validOutput && (
-                <Box sx={{ mt: 2, maxWidth: '40rem', width: '100%' }}>
+                <Box sx={{ mt: 2, maxWidth: '40rem', width: '100%', maxHeight: '40rem', overflow: 'auto' }} data-testid="output-container">
                     {returnedOutput.map((item, index) => (
                         <Box
                             key={index}
+                            data-testid={`output-item-container-${index}`}
                             sx={{
                                 mt: 1,
                                 p: 1.5,
@@ -55,20 +58,23 @@ export default function NumberWords() {
                         >
 
                             {item.type === "text" && (
-                                <Box component="span">{item.value}</Box>
+                                <Box component="span" data-testid={`output-text-item-${index}`}>
+                                    {item.value}
+                                </Box>
                             )}
 
                             {item.type === 'image' && (
-                                <Box sx={{ mt: 1 }}>
+                                <Box sx={{ mt: 1 }} data-testid={`output-image-container-${index}`}>
                                     {item.image ? (
                                         <Box
                                             component="img"
+                                            data-testid={`output-image-item-${index}`}
                                             src={item.image}
                                             alt=""
                                             sx={{ maxWidth: '100%', display: 'block' }}
                                         />
                                     ) : (
-                                        <Box component="span" sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+                                        <Box component="span" data-testid={`output-image-placeholder-${index}`} sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
                                             Unable to load image.
                                         </Box>
                                     )}

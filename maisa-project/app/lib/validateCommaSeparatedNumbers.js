@@ -2,8 +2,9 @@
 const WHOLE_NUMBER_TOKEN = /^-?\d+$/;
 export default function validateCommaSeparatedNumbers(input) {
     const parts = input.split(',').map((s) => s.trim())
-    if (parts.length === 0) {
-        return { ok: false, parts: [], error: 'Enter at least one number.' };
+    console.log(parts)
+    if (parts.length === 1 && parts[0] == '') {
+        return { ok: false, parts: [], error: 'Enter at least one number (e.g. 1, 2, 15, -42).' };
     }
     const normalizedParts = [];
     for (const p of parts) {
@@ -11,14 +12,14 @@ export default function validateCommaSeparatedNumbers(input) {
             return {
                 ok: false,
                 parts: parts,
-                error: 'Empty number detected. Please ensure all numbers are valid whole numbers.',
+                error: 'Empty number detected. Please ensure all numbers are valid whole numbers (e.g. 1, 2, 15, -42).',
             };
         }
         if (!WHOLE_NUMBER_TOKEN.test(p)) {
             return {
                 ok: false,
                 parts: parts,
-                error: `Invalid whole number: "${p}". Use digits only (e.g. 0, 1, 2, -3).`,
+                error: `Invalid whole number: "${p}". Use whole numbers only (e.g. 1, 2, 15, -42).`,
             };
         }
         const n = Number(p);
