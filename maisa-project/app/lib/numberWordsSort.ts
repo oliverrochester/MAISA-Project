@@ -40,28 +40,6 @@ export function parseSortTextRequestBody(body: unknown): { ok: true; numbers: nu
     return { ok: true, numbers };
 }
 
-export function parseCommaSeparatedSafeIntegers(input: string): number[] {
-    const segments = input.split(',').map((s) => s.trim());
-    if (segments.length === 0 || (segments.length === 1 && segments[0] === '')) {
-        throw new Error('Empty input is not allowed.');
-    }
-    const numbers: number[] = [];
-    for (const seg of segments) {
-        if (seg === '') {
-            throw new Error('Empty values are not allowed.');
-        }
-        if (!/^-?\d+$/.test(seg)) {
-            throw new Error(`Invalid input: '${seg}' is not a valid whole number.`);
-        }
-        const n = Number(seg);
-        if (!Number.isSafeInteger(n)) {
-            throw new Error(`Invalid input: '${seg}' is not a safe whole number.`);
-        }
-        numbers.push(n);
-    }
-    return numbers;
-}
-
 export function buildSortTextResponse(nums: number[]): SortTextRow[] {
     const rows: { row: SortTextRow; index: number; sortKey: string }[] = [];
 
@@ -70,7 +48,7 @@ export function buildSortTextResponse(nums: number[]): SortTextRow[] {
         console.log(`Number ${n} converts to words: '${rawWords}'`);
         const value = englishWordsToTitleCase(rawWords);
 
-        if (Math.abs(n) > 9000) {
+        if (n > 9000) {
             const svg = buildLargeNumberSvg(n);
             rows.push({
                 row: {

@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'n must be a safe integer.' }, { status: 400 });
     }
 
-    if (Math.abs(n) <= 9000) {
+    if (n <= 9000) {
         return NextResponse.json(
-            { success: false, error: 'Images are only provided for numbers with |n| > 9000.' },
+            { success: false, error: 'Images are only provided for numbers with n > 9000.' },
             { status: 400 },
         );
     }

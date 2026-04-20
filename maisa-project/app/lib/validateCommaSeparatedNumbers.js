@@ -27,7 +27,7 @@ export default function validateCommaSeparatedNumbers(input) {
             return {
                 ok: false,
                 parts: parts,
-                error: `Number out of range: "${p}".`,
+                error: `Number too large: "${p}". Use whole numbers only (e.g. 1, 2, 15, -42).`,
             };
         }
         normalizedParts.push(n);
