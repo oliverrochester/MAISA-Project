@@ -14,6 +14,12 @@ export default function validateCommaSeparatedNumbers(input) {
                 error: 'Empty number detected. Please ensure all numbers are valid whole numbers (e.g. 1, 2, 15, -42).',
             };
         }
+        if (p.includes('\n')) {
+            return {
+            ok: false,
+            error: 'Newline character detected. Please enter numbers separated by commas only.',
+            };
+        }
         if (!WHOLE_NUMBER_TOKEN.test(p)) {
             return {
                 ok: false,
@@ -21,6 +27,7 @@ export default function validateCommaSeparatedNumbers(input) {
             };
         }
         const n = Number(p);
+        console.log(n)
         if (!Number.isSafeInteger(n)) {
             const displayP = p.length > 20 ? p.substring(0, 20) + '...' : p;
             return {
