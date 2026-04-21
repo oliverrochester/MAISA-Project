@@ -45,7 +45,6 @@ export function buildSortTextResponse(nums: number[]): SortTextRow[] {
 
     nums.forEach((n, index) => {
         const rawWords = integerToEnglishWords(n);
-        console.log(`Number ${n} converts to words: '${rawWords}'`);
         const value = englishWordsToTitleCase(rawWords);
 
         if (n > 9000) {
