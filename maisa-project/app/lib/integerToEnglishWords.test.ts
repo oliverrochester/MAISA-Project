@@ -75,11 +75,11 @@ describe('integerToEnglishWords', () => {
         expect(result1001).toBe('one thousand one');
         expect(englishWordsToTitleCase(result1001)).toBe('One Thousand One');
 
-        const result1_000_000 = integerToEnglishWords(1_000_000);
+        const result1_000_000 = integerToEnglishWords(1000000);
         expect(result1_000_000).toBe('one million');
         expect(englishWordsToTitleCase(result1_000_000)).toBe('One Million');
 
-        const result1_000_001 = integerToEnglishWords(1_000_001);
+        const result1_000_001 = integerToEnglishWords(1000001);
         expect(result1_000_001).toBe('one million one');
         expect(englishWordsToTitleCase(result1_000_001)).toBe('One Million One');
     });
