@@ -10,7 +10,6 @@ import { Tooltip } from '@mui/material';
 export default function NumberWords() {
     const [inputNumberListString, setInputNumberListString] = useState('');
     const [validationError, setValidationError] = useState(null);
-    const [validOutput, setValidOutput] = useState(false);
     const [returnedOutput, setReturnedOutput] = useState([]);
 
     const handleSortText = async () => {
@@ -22,7 +21,6 @@ export default function NumberWords() {
         try {
             const response = await sortText(parsed.parts);
             setReturnedOutput(response.data);
-            setValidOutput(true);
             setValidationError(null);
         } catch (error) {
             setValidationError('An error occurred while sorting. Please try again later.');
@@ -48,7 +46,7 @@ export default function NumberWords() {
                 helperText={validationError ?? undefined}
             />
             <Button sx={{ mt: 2 }} variant="contained" onClick={handleSortText}>Sort Text</Button>
-            {validOutput && (
+            {returnedOutput.length > 0 && (
                 <Box sx={{ mt: 2, maxWidth: '30rem', width: '100%', maxHeight: '40rem', overflow: 'auto' }} data-testid="output-container">
                     {returnedOutput.map((item, index) => (
                         <Box
