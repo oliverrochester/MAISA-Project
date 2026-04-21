@@ -16,8 +16,8 @@ export default function validateCommaSeparatedNumbers(input) {
         }
         if (p.includes('\n')) {
             return {
-            ok: false,
-            error: 'Newline character detected. Please enter numbers separated by commas only.',
+                ok: false,
+                error: 'Newline character detected. Please enter numbers separated by commas only.',
             };
         }
         if (!WHOLE_NUMBER_TOKEN.test(p)) {

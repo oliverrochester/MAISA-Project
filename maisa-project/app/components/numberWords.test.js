@@ -87,6 +87,26 @@ describe('NumberWords', () => {
     expect(screen.getByText('Empty number detected. Please ensure all numbers are valid whole numbers (e.g. 1, 2, 15, -42).')).toBeInTheDocument();
   });
 
+  it('Shows "Newline character detected" validation error and does not call sortText when input is invalid', async () => {
+    validateCommaSeparatedNumbers.mockReturnValue({
+      ok: false,
+      error: 'Newline character detected. Please enter numbers separated by commas only.',
+    });
+
+    render(<NumberWords />);
+
+    const user = userEvent.setup();
+    const input = screen.getByLabelText('Enter a comma separated list of whole numbers');
+    const button = screen.getByRole('button', { name: 'Sort Text' });
+
+    await user.type(input, '1,2\n,3');
+    await user.click(button);
+
+    expect(validateCommaSeparatedNumbers).toHaveBeenCalledWith('1,2\n,3');
+    expect(sortText).not.toHaveBeenCalled();
+    expect(screen.getByText('Newline character detected. Please enter numbers separated by commas only.')).toBeInTheDocument();
+  });
+
    it('Shows "Enter at least one number" validation error and does not call sortText when input is invalid', async () => {
     validateCommaSeparatedNumbers.mockReturnValue({
       ok: false,
@@ -206,10 +226,10 @@ describe('NumberWords', () => {
   it('renders placeholder when image type has no URL', async () => {
     validateCommaSeparatedNumbers.mockReturnValue({
       ok: true,
-      parts: [1],
+      parts: [10000],
     });
     sortText.mockResolvedValue({
-      data: [{ type: 'image', image: null }],
+      data: [{ type: 'image', number: 10000, image: null, value: 'Ten Thousand' }],
     });
 
     render(<NumberWords />);
