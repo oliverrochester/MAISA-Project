@@ -1,8 +1,8 @@
-import { buildSortTextResponse, parseSortTextRequestBody } from './numberWordsSort';
+import { buildSortTextResponse, validateNumberArray } from './numberWordsSort';
 
 describe('buildSortTextResponse', () => {
     it('Test sorting only text type numbers, postives and negatives, and zero', () => {
-        const parsed = parseSortTextRequestBody([3, 2, 1, 0, -1, -2, -3]);
+        const parsed = validateNumberArray([3, 2, 1, 0, -1, -2, -3]);
         expect(parsed.ok).toBe(true);
         if (!parsed.ok) throw new Error("Expected parsing to succeed");
         const result = buildSortTextResponse(parsed.numbers);
@@ -19,7 +19,7 @@ describe('buildSortTextResponse', () => {
     });
 
     it('Tests sorting only large numbers with image type', () => {
-        const parsed = parseSortTextRequestBody([9005, 9006, 10000, 100867, 8008475]);
+        const parsed = validateNumberArray([9005, 9006, 10000, 100867, 8008475]);
         expect(parsed.ok).toBe(true);
         if (!parsed.ok) throw new Error("Expected parsing to succeed");
         const result = buildSortTextResponse(parsed.numbers);
@@ -35,7 +35,7 @@ describe('buildSortTextResponse', () => {
     });
 
     it('Edge Case: Tests sorting with text to image transition [9000, 9001]', () => {
-        const parsed = parseSortTextRequestBody([9001, 9000]);
+        const parsed = validateNumberArray([9001, 9000]);
         expect(parsed.ok).toBe(true);
         if (!parsed.ok) throw new Error("Expected parsing to succeed");
         const result = buildSortTextResponse(parsed.numbers);
@@ -49,7 +49,7 @@ describe('buildSortTextResponse', () => {
     });
 
     it('Tests sorting correctly with a mix of text and image numbers', () => {
-        const parsed = parseSortTextRequestBody([0, 9001, -1, -9002, 9002, 2]);
+        const parsed = validateNumberArray([0, 9001, -1, -9002, 9002, 2]);
         expect(parsed.ok).toBe(true);
         if (!parsed.ok) throw new Error("Expected parsing to succeed");
         const result = buildSortTextResponse(parsed.numbers);
@@ -72,75 +72,75 @@ describe('buildSortTextResponse', () => {
 
     
 
-    it('rejects singular positive unsafe integer in parseSortTextRequestBody', () => {
+    it('rejects singular positive unsafe integer in validateNumberArray', () => {
         const unsafePositiveInteger = Number.MAX_SAFE_INTEGER + 1;
-        expect(parseSortTextRequestBody([unsafePositiveInteger])).toEqual({
+        expect(validateNumberArray([unsafePositiveInteger])).toEqual({
             ok: false,
             error: 'Invalid number at index 0: expected a safe whole number.',
         });
     });
 
-    it('rejects singular negative unsafe integer in parseSortTextRequestBody', () => {
+    it('rejects singular negative unsafe integer in validateNumberArray', () => {
         const unsafeNegativeInteger = Number.MIN_SAFE_INTEGER - 1;
-        expect(parseSortTextRequestBody([unsafeNegativeInteger])).toEqual({
+        expect(validateNumberArray([unsafeNegativeInteger])).toEqual({
             ok: false,
             error: 'Invalid number at index 0: expected a safe whole number.',
         });
     });
 
-    it('rejects unsafe positive integer mixed with safe integers in parseSortTextRequestBody', () => {
+    it('rejects unsafe positive integer mixed with safe integers in validateNumberArray', () => {
         const unsafePositiveInteger = Number.MAX_SAFE_INTEGER + 1;
-        expect(parseSortTextRequestBody([1, unsafePositiveInteger, 2])).toEqual({
+        expect(validateNumberArray([1, unsafePositiveInteger, 2])).toEqual({
             ok: false,
             error: 'Invalid number at index 1: expected a safe whole number.',
         });
     });
 
-    it('rejects unsafe negative integer mixed with safe integers in parseSortTextRequestBody', () => {
+    it('rejects unsafe negative integer mixed with safe integers in validateNumberArray', () => {
         const unsafeNegativeInteger = Number.MIN_SAFE_INTEGER - 1;
-        expect(parseSortTextRequestBody([1, unsafeNegativeInteger, 2])).toEqual({
+        expect(validateNumberArray([1, unsafeNegativeInteger, 2])).toEqual({
             ok: false,
             error: 'Invalid number at index 1: expected a safe whole number.',
         });
     });
 
-    it('rejects singular text in parseSortTextRequestBody', () => {
-        expect(parseSortTextRequestBody(['hello'])).toEqual({
+    it('rejects singular text in validateNumberArray', () => {
+        expect(validateNumberArray(['hello'])).toEqual({
             ok: false,
             error: 'Invalid number at index 0: expected a safe whole number.',
         });
     });
 
-    it('rejects text mixed with safe integers in parseSortTextRequestBody', () => {
-        expect(parseSortTextRequestBody([1,'hello', 2])).toEqual({
+    it('rejects text mixed with safe integers in validateNumberArray', () => {
+        expect(validateNumberArray([1,'hello', 2])).toEqual({
             ok: false,
             error: 'Invalid number at index 1: expected a safe whole number.',
         });
     });
 
-    it('rejects singular NAN in parseSortTextRequestBody', () => {
-        expect(parseSortTextRequestBody([NaN])).toEqual({
+    it('rejects singular NAN in validateNumberArray', () => {
+        expect(validateNumberArray([NaN])).toEqual({
             ok: false,
             error: 'Invalid number at index 0: expected a safe whole number.',
         });
     });
 
-    it('rejects NAN mixed with safe integers in parseSortTextRequestBody', () => {
-        expect(parseSortTextRequestBody([1, NaN, 2])).toEqual({
+    it('rejects NAN mixed with safe integers in validateNumberArray', () => {
+        expect(validateNumberArray([1, NaN, 2])).toEqual({
             ok: false,
             error: 'Invalid number at index 1: expected a safe whole number.',
         });
     });
 
-    it('rejects empty array in parseSortTextRequestBody', () => {
-        expect(parseSortTextRequestBody([])).toEqual({
+    it('rejects empty array in validateNumberArray', () => {
+        expect(validateNumberArray([])).toEqual({
             ok: false,
             error: 'Array must contain at least one number.',
         });
     });
 
-    it('rejects invalid JSON array in parseSortTextRequestBody', () => {
-        expect(parseSortTextRequestBody({})).toEqual({
+    it('rejects invalid JSON array in validateNumberArray', () => {
+        expect(validateNumberArray({})).toEqual({
             ok: false,
             error: 'Request body must be a JSON array of whole numbers.',
         });

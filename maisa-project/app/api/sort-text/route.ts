@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { buildSortTextResponse, parseSortTextRequestBody } from '../../lib/numberWordsSort';
+import { buildSortTextResponse, validateNumberArray } from '../../lib/numberWordsSort';
 
 export async function POST(request: NextRequest) {
     // Check authentication
@@ -11,11 +11,11 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, error: 'Invalid JSON body.' }, { status: 400 });
     }
 
-    const parsed = parseSortTextRequestBody(body);
-    if (parsed.ok === false) {
-        return NextResponse.json({ success: false, error: parsed.error }, { status: 400 });
+    const validated = validateNumberArray(body);
+    if (validated.ok === false) {
+        return NextResponse.json({ success: false, error: validated.error }, { status: 400 });
     }
 
-    const data = buildSortTextResponse(parsed.numbers);
+    const data = buildSortTextResponse(validated.numbers);
     return NextResponse.json({ success: true, data }, { status: 200 });
 }

@@ -8,18 +8,18 @@ import { Tooltip } from '@mui/material';
 
 
 export default function NumberWords() {
-    const [inputNumberListString, setInputNumberListString] = useState('');
+    const [inputAsStringArray, setinputAsStringArray] = useState('');
     const [validationError, setValidationError] = useState(null);
     const [returnedOutput, setReturnedOutput] = useState([]);
 
     const handleSortText = async () => {
-        const parsed = validateCommaSeparatedNumbers(inputNumberListString);
-        if (!parsed.ok) {
-            setValidationError(parsed.error);
+        const inputAsNumberArray = validateCommaSeparatedNumbers(inputAsStringArray);
+        if (!inputAsNumberArray.ok) {
+            setValidationError(inputAsNumberArray.error);
             return;
         }
         try {
-            const response = await sortText(parsed.parts);
+            const response = await sortText(inputAsNumberArray.parts);
             setReturnedOutput(response.data);
             setValidationError(null);
         } catch (error) {
@@ -35,8 +35,8 @@ export default function NumberWords() {
                 variant="outlined"
                 multiline
                 rows={4}
-                value={inputNumberListString}
-                onChange={(e) => setInputNumberListString(e.target.value)}
+                value={inputAsStringArray}
+                onChange={(e) => setinputAsStringArray(e.target.value)}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                         e.preventDefault();

@@ -22,7 +22,7 @@ function svgToDataUrl(svg: string): string {
     return `data:image/svg+xml;base64,${b64}`;
 }
 
-export function parseSortTextRequestBody(body: unknown): { ok: true; numbers: number[] } | { ok: false; error: string } {
+export function validateNumberArray(body: unknown): { ok: true; numbers: number[] } | { ok: false; error: string } {
     if (!Array.isArray(body)) {
         return { ok: false, error: 'Request body must be a JSON array of whole numbers.' };
     }
@@ -53,7 +53,7 @@ export function buildSortTextResponse(nums: number[]): SortTextRow[] {
                 row: {
                     type: 'image',
                     number: n,
-                    value,
+                    value: value,
                     image: svgToDataUrl(svg),
                 },
                 index,
@@ -64,7 +64,7 @@ export function buildSortTextResponse(nums: number[]): SortTextRow[] {
                 row: {
                     type: 'text',
                     number: n,
-                    value,
+                    value: value
                 },
                 index,
                 sortKey: rawWords,
